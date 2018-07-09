@@ -2,10 +2,13 @@
   "name": "cf-bot",
   "version": "1.0.0",
   "description": "A discord bot for codeforces",
-  "main": "./src/index.js",
+  "main": "./build/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --cache src/*.js"
+    "lint": "eslint --cache src/*.js",
+    "build": "npm run build-clean && npm run build-make",
+    "build-clean": "rm -rf build/",
+    "build-make": "babel src -d build/"
   },
   "repository": {
     "type": "git",
@@ -18,9 +21,13 @@
   },
   "homepage": "https://github.com/yat0/cf-bot#readme",
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "discord.js": "^11.3.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
     "eslint": "^5.0.1"
   }
 }
