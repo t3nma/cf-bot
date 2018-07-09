@@ -1,22 +1,14 @@
-const fs = require('fs');
-const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+import Discord from 'discord.js';
+import { prefix, token } from '../config.json';
+import commands from './commands';
 
 const client = new Discord.Client();
-client.commands = new Discord.Collection();
-
-const cmd_files = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
-
-for(const file of cmd_files) {
-    const cmd = require(`./commands/${file}`);
-    client.commands.set(cmd.name, cmd);
-}
 
 client.on('ready', () => {
     console.log('Ready!');
 });
 
-client.on('message', msg => {
+client.on('message', async msg => {
     if(!msg.content.startsWith(prefix) || msg.author.bot) {
         return;
     }
@@ -24,11 +16,11 @@ client.on('message', msg => {
     const args = msg.content.slice(prefix.length).split(/ +/);
     const cmd_name = args.shift().toLowerCase();
 
-    if(!client.commands.has(cmd_name)) {
+    if(!commands[cmd_name]) {
         return;
     }
 
-    const cmd = client.commands.get(cmd_name);
+    const cmd = commands[cmd_name];
 
     try {
         if(cmd.args) {
