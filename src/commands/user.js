@@ -23,11 +23,11 @@ const execute = async function(msg, args) {
 
     for(const user of users) {
         const embed = new Discord.RichEmbed()
-        .setTitle(user.handle)
-        .setThumbnail(`https:${user.avatar}`)
-        .addField('Name', `${user.firstName} ${user.lastName}`)
-        .addField('Rank', `${user.rank} (${user.rating})`)
-        .setURL(`http://codeforces.com/profile/${user.handle}`);
+            .setTitle(user.handle)
+            .setThumbnail(`https:${user.avatar}`)
+            .addField('Name', `${user.firstName} ${user.lastName}`)
+            .addField('Rank', `${user.rank} (${user.rating})`)
+            .setURL(`http://codeforces.com/profile/${user.handle}`);
 
         const color = user.rank
             ? RANK_COLOR[user.rank.replace(/ +/, '_')]
@@ -41,8 +41,9 @@ const execute = async function(msg, args) {
 
 const user = {
     name: 'user',
-    description: 'something',
+    description: 'display user info',
     args: true,
+    cooldown: 3,
     execute,
 };
 
