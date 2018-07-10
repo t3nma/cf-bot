@@ -1,45 +1,42 @@
 import Discord from 'discord.js';
-import snekfetch from 'snekfetch';
+import { get_user_info } from '../cf/api';
+import { RANK_COLOR } from '../cf/constants';
 
 const execute = async function(msg, args) {
-
-    const url = `http://codeforces.com/api/user.info?handles=${args[0]}`;
-    console.log(`URL: ${url}`);
-
-    let user;
+    let users;
 
     try {
-
-        const { body } = await snekfetch.get(url);
-        user = body.result[0];
-
+        const { body } = await get_user_info(args);
+        users = body.result;
     } catch(err) {
         console.error(err);
 
         if(err.status && err.status === 400) {
             // bad request, no such user
-            msg.reply(`there is no user registered with the handle *${args[0]}*`);
+            msg.channel.send(err.body.comment);
         } else {
-            msg.reply('an error occured while processing your request');
+            msg.channel.send('an error occured while processing the request');
         }
 
         return;
     }
 
-    const embed = new Discord.RichEmbed()
+    for(const user of users) {
+        const embed = new Discord.RichEmbed()
         .setTitle(user.handle)
-        .setColor('BLUE')
-        .setThumbnail(`https:${user.avatar}`);
+        .setThumbnail(`https:${user.avatar}`)
+        .addField('Name', `${user.firstName} ${user.lastName}`)
+        .addField('Rank', `${user.rank} (${user.rating})`)
+        .setURL(`http://codeforces.com/profile/${user.handle}`);
 
-    if(user.firstName && user.lastName) {
-        embed.addField('Name', `${user.firstName} ${user.lastName}`);
+        const color = user.rank
+            ? RANK_COLOR[user.rank.replace(/ +/, '_')]
+            : RANK_COLOR.headquarters; // not sure
+
+        embed.setColor(color);
+
+        msg.channel.send('', { embed });
     }
-
-    embed.addField('Rank', `${user.rank} (${user.rating})`);
-
-    // TODO set color according to rank
-
-    msg.channel.send('', { embed });
 };
 
 const user = {
