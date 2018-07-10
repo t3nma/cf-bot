@@ -1,7 +1,7 @@
-import ping from './ping';
+import user from './user';
 
 const commands = {
-    ping,
+    user,
 };
 
 export default commands;
