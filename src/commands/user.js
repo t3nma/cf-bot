@@ -3,22 +3,23 @@ import { get_user_info } from '../cf/api';
 import { RANK_COLOR } from '../cf/constants';
 
 const execute = async function(msg, args) {
+    if(args.length > 10000) {
+        msg.channel.send('no more than 10000 handles are accepted');
+    }
+
     let users;
 
     try {
         const { body } = await get_user_info(args);
         users = body.result;
     } catch(err) {
-        console.error(err);
-
         if(err.status && err.status === 400) {
             // bad request, no such user
-            msg.channel.send(err.body.comment);
-        } else {
-            msg.channel.send('an error occured while processing the request');
+            return msg.reply(err.body.comment);
         }
 
-        return;
+        console.error(err);
+        throw 'an error occured while processing the request';
     }
 
     for(const user of users) {
@@ -43,6 +44,7 @@ const user = {
     name: 'user',
     description: 'display user info',
     args: true,
+    usage: '!user handle1 handle2 ...',
     cooldown: 3,
     execute,
 };

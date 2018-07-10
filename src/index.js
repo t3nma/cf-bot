@@ -27,6 +27,7 @@ client.on('message', async msg => {
 
     const cmd = commands[cmd_name];
 
+    /* handle command cooldown */
     const now = Date.now();
     const timestamps = cooldowns.get(cmd.name);
     const cooldown_amount = (cmd.cooldown || 3) * 1000;
@@ -43,19 +44,21 @@ client.on('message', async msg => {
     timestamps.set(msg.author.id, now);
     setTimeout(() => timestamps.delete(msg.author.id), cooldown_amount);
 
-    try {
-        if(cmd.args) {
-            if(!args.length) {
-                return msg.reply(`${cmd.name} could use some arguments...`);
-            }
+    /* check args */
+    if(cmd.args && !args.length) {
+        let reply = 'no arguments provided!';
 
-            cmd.execute(msg, args);
-        } else {
-            cmd.execute(msg);
+        if(cmd.usage) {
+            reply += `\nusage: \`${cmd.usage}\``;
         }
+
+        return msg.reply(reply);
+    }
+
+    try {
+        cmd.execute(msg, args);
     } catch(err) {
-        console.error(err);
-        msg.reply('there was an error trying to execute that command!');
+        msg.reply(err);
     }
 });
 
