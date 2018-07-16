@@ -3,9 +3,18 @@ import { API } from './constants';
 
 /**
  * http://codeforces.com/api/help/methods#user.info
- * @param {array<string>} user handles
+ * @param {array<string>} handles user handles
  */
-export const get_user_info = async function(handles) {
+export const get_user = async function(handles) {
     const params = handles.join(';');
-    return await snekfetch.get(API.user_info + params);
+    return await snekfetch.get(API.user + params);
+};
+
+/**
+ * http://codeforces.com/api/help/methods#problemset.problems
+ * @param {array<string>} tags problem tags
+ */
+export const get_problem = async function(tags) {
+    const params = tags.join(';');
+    return await snekfetch.get(API.problem + params);
 };

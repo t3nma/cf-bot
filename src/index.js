@@ -14,18 +14,19 @@ client.on('message', async msg => {
         return;
     }
 
-    const args = msg.content.slice(prefix.length).split(/ +/);
-    const cmd_name = args.shift().toLowerCase();
+    let args = msg.content.slice(prefix.length).split(/ +/);
+    let cmd = args.shift().toLowerCase();
+    args = args.join(' ');
 
-    if(!commands[cmd_name]) {
+    if(!commands[cmd]) {
         return;
     }
 
-    if(!cooldowns.has(cmd_name)) {
-        cooldowns.set(cmd_name, new Discord.Collection());
+    if(!cooldowns.has(cmd)) {
+        cooldowns.set(cmd, new Discord.Collection());
     }
 
-    const cmd = commands[cmd_name];
+    cmd = commands[cmd];
 
     /* handle command cooldown */
     const now = Date.now();
@@ -45,8 +46,8 @@ client.on('message', async msg => {
     setTimeout(() => timestamps.delete(msg.author.id), cooldown_amount);
 
     /* check args */
-    if(cmd.args && !args.length) {
-        let reply = 'no arguments provided!';
+    if(cmd.validate && !cmd.validate(args)) {
+        let reply = 'the arguments are invalid!';
 
         if(cmd.usage) {
             reply += `\nusage: \`${cmd.usage}\``;

@@ -1,21 +1,39 @@
+/**
+ * user command
+ *   - retrive info about the users whose
+ *     handles are provided.
+ *
+ * usage:
+ *   !user [handles]
+ *
+ *   handles - space separated user handles
+ */
+
 import Discord from 'discord.js';
-import { get_user_info } from '../cf/api';
+import { get_user } from '../cf/api';
 import { RANK_COLOR } from '../cf/constants';
 
+const validate = args => {
+    return args.length;
+};
+
 const execute = async function(msg, args) {
+    args = args.split(' ');
+
     if(args.length > 10000) {
-        msg.channel.send('no more than 10000 handles are accepted');
+        return msg.channel.send('no more than 10000 handles are accepted');
     }
 
     let users;
 
     try {
-        const { body } = await get_user_info(args);
+        const { body } = await get_user(args);
         users = body.result;
     } catch(err) {
         if(err.status && err.status === 400) {
             // bad request, no such user
-            return msg.reply(err.body.comment);
+            msg.reply(err.body.comment);
+            return;
         }
 
         console.error(err);
@@ -32,7 +50,7 @@ const execute = async function(msg, args) {
 
         const color = user.rank
             ? RANK_COLOR[user.rank.replace(/ +/, '_')]
-            : RANK_COLOR.headquarters; // not sure
+            : RANK_COLOR.headquarters; // assume color for regular users with no rank too
 
         embed.setColor(color);
 
@@ -43,7 +61,7 @@ const execute = async function(msg, args) {
 const user = {
     name: 'user',
     description: 'display user info',
-    args: true,
+    validate,
     usage: '!user handle1 handle2 ...',
     cooldown: 3,
     execute,

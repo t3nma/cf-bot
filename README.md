@@ -4,7 +4,12 @@ A discord bot for codeforces
 ## TODO
 
 + [ ] license (repo + package.json)
-+ [ ] add commands
-+ [ ] cooldown
++ [X] user command
++ [X] problem
++ [ ] contest command
++ [ ] help commmand
++ [ ] warn about help command in error msgs
++ [ ] better usage
++ [X] cooldown
 + [ ] test
 + [ ] proper readme

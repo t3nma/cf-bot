@@ -1,5 +1,6 @@
 export const API = {
-    user_info: 'http://codeforces.com/api/user.info?handles=',
+    user: 'http://codeforces.com/api/user.info?handles=',
+    problem: 'http://codeforces.com/api/problemset.problems?tags=',
 };
 
 export const RANK_COLOR = {
