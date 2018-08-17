@@ -1,27 +1,23 @@
 /**
  * user command
- *   - retrive info about the users whose
- *     handles are provided.
+ *  - retrive info about the users whose
+ *    handles are provided
  *
  * usage:
  *   !user [handles]
  *
- *   handles - space separated user handles
+ *   handles - space separated user handles. Up to 3
+ *             handles maximum.
  */
 
 import Discord from 'discord.js';
 import { get_user } from '../cf/api';
 import { RANK_COLOR } from '../cf/constants';
 
-const validate = args => {
-    return args.length;
-};
-
 const execute = async function(msg, args) {
-    args = args.split(' ');
-
-    if(args.length > 10000) {
-        return msg.channel.send('no more than 10000 handles are accepted');
+    if(args.length > 3) {
+        msg.reply('no more than 3 handles accepted.');
+        return;
     }
 
     let users;
@@ -37,7 +33,7 @@ const execute = async function(msg, args) {
         }
 
         console.error(err);
-        throw 'an error occured while processing the request';
+        throw 'An error occured while processing the request';
     }
 
     for(const user of users) {
@@ -60,10 +56,10 @@ const execute = async function(msg, args) {
 
 const user = {
     name: 'user',
-    description: 'display user info',
-    validate,
-    usage: '!user handle1 handle2 ...',
-    cooldown: 3,
+    description: 'Diplay user information. Maximum of 3 users per request.',
+    usage: '!user [handles]',
+    args: true,
+    cooldown: 5,
     execute,
 };
 

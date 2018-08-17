@@ -1,13 +1,14 @@
 /**
  * problem command
- *  - retrive random problem based on index
- *    and tags (when provided).
+ *  - retrive random problem with (optional) provided tags
  *
  * usage:
- *   !user [index] [tags]
+ *   !problem [tags]
  *
- *   index - (OPTIONAL) problem's contest index (capitalized letter)
- *   tags  - (OPTIONAL) semicolon separated problem tags
+ *   tags - (OPTIONAL) space separated tags. Multi word tags
+ *          should be provided as a single word with
+ *          underscore (_) as separator. List of tags:
+ *          http://codeforces.com/blog/entry/14565
  */
 
 import Discord from 'discord.js';
@@ -15,61 +16,37 @@ import { get_problem } from '../cf/api';
 import { randomInt } from '../utils';
 
 const execute = async function(msg, args) {
-    let arg_index;
-
-    args = args.split(' ');
-
-    if(args.length && /^[A-Z][0-9]?$/.test(args[0])) {
-        arg_index = args.shift();
-    }
-
-    args = args.join(' ').split(';').map(arg => arg.trim());
+    const user_tags = args.map(arg => arg.split('_').join(' '));
 
     let result;
 
     try {
-        const { body } = await get_problem(args);
+        const { body } = await get_problem(user_tags);
         result = body.result;
     } catch(err) {
         if(err.status && err.status === 400) {
             // bad request, invalid tag format
-            msg.reply('tags should contain only lowercase letters, numbers, '
-                + ' spaces and the symbols ***** and **-**.');
+            msg.reply('tags should contain only lowercase letters, numbers,'
+                + ' spaces and hifens (-). You can look on the available'
+                + ' tags here: http://codeforces.com/blog/entry/14565');
             return;
         }
 
         console.error(err);
-        throw 'an error occured while processing the request';
+        throw 'An error occured while processing the request.';
     }
 
-    let { problems } = result;
+    const { problems } = result;
 
     if(!problems.length) {
-        msg.reply('found no problems with that tags');
+        msg.reply('found no problems with the specified tags.');
         return;
-    }
-
-    if(arg_index) {
-        problems = problems.filter(prob =>
-            prob.index && prob.index == arg_index
-        );
-
-        if(!problems.length) {
-            let reply = 'found no problems with that index';
-            if(args.length) {
-                reply += ' and tags';
-            }
-
-            msg.reply(reply);
-            return;
-        }
     }
 
     const r = randomInt(0, problems.length - 1);
 
     const { name, contestId, index, tags } = problems[r];
     const { solvedCount } = result.problemStatistics[r];
-
 
     const embed = new Discord.RichEmbed()
         .setTitle(name)
@@ -83,8 +60,11 @@ const execute = async function(msg, args) {
 
 const problem = {
     name: 'problem',
-    description: 'retrieve a random problem with given index & tags',
-    usage: 'problem [index] [tags]',
+    description: 'Retrieve a random problem with (optional) provided tags. Tags'
+        + ' must be space separated. Multi-word tags must use underscore (_) as'
+        + ' separator. Tag list: http://codeforces.com/blog/entry/14565',
+    usage: 'problem [tags]',
+    args: false,
     cooldown: 5,
     execute,
 };

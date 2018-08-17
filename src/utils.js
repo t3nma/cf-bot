@@ -3,3 +3,6 @@ export const randomInt = (min, max) => {
     max = Math.ceil(max);
     return Math.floor(Math.random() * (max - min)) + min;
 };
+
+export const convertEpochToDate = epoch =>
+    new Date(epoch * 1000).toString();

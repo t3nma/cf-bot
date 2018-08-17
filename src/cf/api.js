@@ -18,3 +18,10 @@ export const get_problem = async function(tags) {
     const params = tags.join(';');
     return await snekfetch.get(API.problem + params);
 };
+
+/**
+ * https://codeforces.com/api/help/methods#contest.list
+ */
+export const get_contest = async function() {
+    return await snekfetch.get(API.contest);
+};
