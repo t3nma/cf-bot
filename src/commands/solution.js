@@ -5,7 +5,7 @@ const execute = async function(msg, args) {
 
 const help = {
     name: 'solution',
-    description: 'Show solution for problem',
+    description: 'Show solution for problem while at contest',
     usage: '!solution problem_name',
     args: true,
     execute,

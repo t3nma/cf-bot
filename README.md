@@ -29,8 +29,8 @@ needing to leave the lobby.
 
 #### Solution:
 
-+ `!solution problem_name` - bot will shame you with its brilliant solution for
-the problem you request
++ `!solution problem_name` - bot will shame you by solving the problem you're
+stuck at while in-contest
 
 ## Setup
 
