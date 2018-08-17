@@ -6,10 +6,11 @@ A discord bot for codeforces
 + [ ] license (repo + package.json)
 + [X] user command
 + [X] problem
-+ [ ] contest command
-+ [ ] help commmand
-+ [ ] warn about help command in error msgs
-+ [ ] better usage
++ [X] contest command
++ [X] help commmand
++ [X] warn about help command in error msgs
++ [X] better usage
 + [X] cooldown
 + [ ] test
 + [ ] proper readme
++ [ ] pm2
