@@ -25,7 +25,7 @@ client.on('message', async msg => {
 
     /* handle arguments */
     if(cmd.args !== undefined && cmd.args && args.length == 0) {
-        msg.reply(`you didn't specify any arguments! Type \`help ${cmd.name}\``
+        msg.reply(`you didn't specify any arguments! Type \`${prefix}help ${cmd.name}\``
             + ' for more info about the command');
         return;
     }
