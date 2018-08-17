@@ -12,10 +12,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yat0/cf-bot.git"
+    "url": "git+https://github.com/brunoccast/cf-bot.git"
   },
-  "author": "yat0",
-  "license": "ISC",
+  "author": "brunoccast",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/yat0/cf-bot/issues"
   },

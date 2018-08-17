@@ -13,4 +13,4 @@ A discord bot for codeforces
 + [X] cooldown
 + [ ] test
 + [ ] proper readme
-+ [ ] pm2
++ [ ] pm2 + script?
