@@ -3,7 +3,7 @@ const execute = async function(msg, args) {
     msg.reply('did you seriously tried to use this command?! :joy:');
 };
 
-const help = {
+const solution = {
     name: 'solution',
     description: 'Show solution for problem while at contest',
     usage: '!solution problem_name',
@@ -11,4 +11,4 @@ const help = {
     execute,
 };
 
-export default help;
+export default solution;

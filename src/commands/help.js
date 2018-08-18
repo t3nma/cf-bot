@@ -56,7 +56,6 @@ const help = {
     description: 'List all my commands or info about a specific command',
     usage: '!help [command]',
     args: false,
-    cooldown: 3,
     execute,
 };
 
